@@ -39,5 +39,9 @@ class ClubProfit(models.Model):
     profit = models.FloatField(default=0)
 
 
+class Message(models.Model):
+    message = models.TextField()
 
+    def __str__(self):
+        return self.message
 

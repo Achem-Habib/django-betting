@@ -31,36 +31,70 @@ def bet_resolve(sender, instance, **kwargs):
             else:
                 lost_answer_id.append(rate.id)
 
-        print(won_answer_id)
-        print(lost_answer_id)
+        
 
         bet_to_resolve = PlaceBet.objects.filter(match_id = instance.match.id, question_id=instance.id, 
             question_identifier=instance.identifier, status="pending")
 
-        for bet in bet_to_resolve:
-            if (bet.answer_id in won_answer_id):
-                bet.status = 'won'
-                bet.save()
-                
-                if (bet.club_name):
-                    club_holder = CustomUser.objects.get(username = bet.club_name)
-                    club_commission = bet.amount * profit
-                    club_holder.balance += club_commission
-                    club_holder.save()
+        if (instance.finished_date_time == None):
+            for bet in bet_to_resolve:
+                if (bet.answer_id in won_answer_id):
+                    bet.status = 'won'
+                    bet.save()
+                    
+                    if (bet.club_name):
+                        club_holder = CustomUser.objects.get(username = bet.club_name)
+                        club_commission = bet.amount * profit
+                        club_holder.balance += club_commission
+                        club_holder.save()
 
 
-                user_amount_return = bet.return_amount - (bet.amount * profit)
-                bet.user.balance += user_amount_return
-                bet.user.save()
-            else:
-                bet.status = 'lost'
-                bet.save()
+                    user_amount_return = bet.return_amount - (bet.amount * profit)
+                    bet.user.balance += user_amount_return
+                    bet.user.save()
+                else:
+                    bet.status = 'lost'
+                    bet.save()
 
-                if (bet.club_name):
-                    club_holder = CustomUser.objects.get(username = bet.club_name)
-                    club_commission = bet.amount * profit
-                    club_holder.balance += club_commission
-                    club_holder.save()
+                    if (bet.club_name):
+                        club_holder = CustomUser.objects.get(username = bet.club_name)
+                        club_commission = bet.amount * profit
+                        club_holder.balance += club_commission
+                        club_holder.save()
+
+        else:
+            for bet in bet_to_resolve:
+                if (bet.date_time <= instance.finished_date_time):
+                    if (bet.answer_id in won_answer_id):
+                        bet.status = 'won'
+                        bet.save()
+                        
+                        if (bet.club_name):
+                            club_holder = CustomUser.objects.get(username = bet.club_name)
+                            club_commission = bet.amount * profit
+                            club_holder.balance += club_commission
+                            club_holder.save()
+
+
+                        user_amount_return = bet.return_amount - (bet.amount * profit)
+                        bet.user.balance += user_amount_return
+                        bet.user.save()
+                    else:
+                        bet.status = 'lost'
+                        bet.save()
+
+                        if (bet.club_name):
+                            club_holder = CustomUser.objects.get(username = bet.club_name)
+                            club_commission = bet.amount * profit
+                            club_holder.balance += club_commission
+                            club_holder.save()
+                else:
+                    bet.status = 'cancelled'
+                    bet.save()
+
+                    bet.user.balance += bet.amount
+                    bet.user.save()
+
 
 
     if(instance.status == 'cancel'):

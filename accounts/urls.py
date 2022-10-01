@@ -15,5 +15,7 @@ urlpatterns = [
     path('club-member/', views.ClubMemberView.as_view(), name='club_member'),
     path('total-bet/', views.TotalBetAndLastBetDateView.as_view(), name='update_total_bet'),
     path('club-profit/', views.ClubProfitView.as_view(), name='club_profit'),
+    path('message/', views.MessageView.as_view(), name='message'),
     path('', views.getRoutes)
 ]
+

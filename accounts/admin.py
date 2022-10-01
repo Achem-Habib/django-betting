@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
-from .models import ClubProfit, CustomUser
+from .models import ClubProfit, CustomUser, Message
 
 
 @admin.register(CustomUser)
@@ -22,6 +22,11 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(ClubProfit)
 class ClubProfitAdmin(admin.ModelAdmin):
     list_display = ("profit",)
+
+@admin.register(Message)
+class ClubProfitAdmin(admin.ModelAdmin):
+    list_display = ("id", "message",)
+    list_editable = ("message",)
 
 
 

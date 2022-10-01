@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .models import ClubProfit, CustomUser
+from .models import ClubProfit, CustomUser, Message
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):   
@@ -106,4 +106,10 @@ class ClubProfitSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ClubProfit
+        fields = '__all__'
+
+class MessageSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Message
         fields = '__all__'

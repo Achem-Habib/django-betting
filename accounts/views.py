@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from accounts.serializer import (ClubMemberSerializer, ClubNameSerializer,
-                                 ClubProfitSerializer,
+                                 ClubProfitSerializer, MessageSerializer,
                                  MyTokenObtainPairSerializer,
                                  RegisterSerializer,
                                  TotalBetAndLastBetDateSerializer,
@@ -17,7 +17,7 @@ from accounts.serializer import (ClubMemberSerializer, ClubNameSerializer,
                                  UpdatePasswordSerializer,
                                  UserBalanceSerializer)
 
-from .models import ClubProfit, CustomUser
+from .models import ClubProfit, CustomUser, Message
 
 # Create your views here.
 
@@ -144,5 +144,13 @@ class ClubProfitView(APIView):
     def get(self, request, format=None):
         profit = ClubProfit.objects.all()
         serializer = ClubProfitSerializer(profit, many=True)
+        
+        return Response(serializer.data)
+
+class MessageView(APIView):
+
+    def get(self, request, format=None):
+        profit = Message.objects.all()
+        serializer = MessageSerializer(profit, many=True)
         
         return Response(serializer.data)
